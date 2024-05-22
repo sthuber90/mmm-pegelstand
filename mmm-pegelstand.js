@@ -8,6 +8,7 @@ Module.register('mmm-pegelstand', {
 
   start: function () {
     Log.log('Starting module: ' + this.name)
+    this.loaded = false
     this.sendSocketNotification('GET_PEGEL', {
       refreshInterval: this.config.refreshInterval,
       pgnr: this.config.pgnr,
@@ -15,13 +16,6 @@ Module.register('mmm-pegelstand', {
   },
 
   socketNotificationReceived: function (notification, payload) {
-    Log.log(
-      this.name +
-        ' received a socket notification: ' +
-        notification +
-        ' - Payload: ' +
-        payload
-    )
     const containerDiv = document.createElement('div')
     const pegelSpan = document.createElement('span')
     pegelSpan.innerHTML = `${payload[4]} ${payload[5]}`
@@ -34,6 +28,8 @@ Module.register('mmm-pegelstand', {
 
     containerDiv.innerHTML = `Pegelstand ${payload[2]}: `
     containerDiv.appendChild(pegelSpan)
+    this.loaded = true
+    this.updateDom(2000)
     this.pegelDiv.appendChild(containerDiv)
   },
 
@@ -51,8 +47,13 @@ Module.register('mmm-pegelstand', {
   getDom: function () {
     const wrapper = document.createElement('div')
     this.pegelDiv = document.createElement('div')
-    wrapper.appendChild(this.pegelDiv)
-
+    if (!this.loaded) {
+      console.log('A')
+      wrapper.innerHTML = this.translate('LOADING')
+    } else {
+      console.log('B')
+      wrapper.appendChild(this.pegelDiv)
+    }
     return wrapper
   },
 })
