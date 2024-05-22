@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mmm-pegelstand should get DOM 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`mmm-pegelstand should have correct defaults 1`] = `
+Object {
+  "floodLimit": 105,
+  "refreshInterval": 900000,
+}
+`;
